@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        .btn-del { color: red; text-decoration: none; }
+        .pw-form { display: inline; }
+    </style>
+</head>
+<body>
+    <h2>System User Management</h2>
+    <a th:href="@{/admin/users/register}">Register New User</a> | <a th:href="@{/}">Home</a>
+    <hr>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Actions</th>
+                <th>Reset Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.role}"></td>
+                <td>
+                    <a th:href="@{/admin/users/delete/{id}(id=${user.id})}" class="btn-del" onclick="return confirm('Delete this user?')">Delete</a>
+                </td>
+                <td>
+                    <form th:action="@{/admin/users/reset-password}" method="post" class="pw-form">
+                        <input type="hidden" name="id" th:value="${user.id}" />
+                        <input type="text" name="newPassword" placeholder="New Password" required />
+                        <button type="submit">Reset</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

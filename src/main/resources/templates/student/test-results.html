@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Results</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; }
+        .result-container { max-width: 700px; margin: auto; }
+        .score-box { background: #34495e; color: white; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 30px; }
+        .q-row { padding: 15px; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 5px; }
+        .correct { border-left: 8px solid #2ecc71; background-color: #f1fcf4; }
+        .incorrect { border-left: 8px solid #e74c3c; background-color: #fdf2f2; }
+        .label { font-weight: bold; display: inline-block; width: 120px; }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <div class="score-box">
+            <h1>Test Results</h1>
+            <h2 th:text="'Your Score: ' + ${result.score} + ' / 20'"></h2>
+        </div>
+
+        <div th:each="q : ${result.questions}" th:class="'q-row ' + (${q.correct} ? 'correct' : 'incorrect')">
+            <p><strong th:text="${q.questionText}"></strong></p>
+            <p><span class="label">Your Answer:</span> <span th:text="${q.studentAnswer}"></span></p>
+            <p th:if="${!q.correct}">
+                <span class="label">Correct Answer:</span> <span th:text="${q.correctAnswer}" style="color: #c0392b; font-weight: bold;"></span>
+            </p>
+            <p th:if="${q.correct}" style="color: #27ae60; font-weight: bold;">✓ Correct</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a th:href="@{/}" style="padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 4px;">Return to Home</a>
+        </div>
+    </div>
+</body>
+</html>

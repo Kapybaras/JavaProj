@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Nouns</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #2ecc71; color: white; }
+        .btn { padding: 5px 10px; text-decoration: none; border-radius: 3px; color: white; }
+        .btn-edit { background-color: #f39c12; }
+        .btn-delete { background-color: #e74c3c; }
+        .btn-add { background-color: #2ecc71; display: inline-block; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Welsh Noun Inventory</h2>
+    <a th:href="@{/nouns/manage/add}" class="btn btn-add">Add New Noun</a>
+    <a th:href="@{/}" style="margin-left: 20px;">Back to Home</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Welsh</th>
+                <th>English</th>
+                <th>Gender</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="noun : ${nouns}">
+                <td th:text="${noun.welsh}"></td>
+                <td th:text="${noun.english}"></td>
+                <td th:text="${noun.gender}"></td>
+                <td>
+                    <a th:href="@{/nouns/manage/edit/{id}(id=${noun.id})}" class="btn btn-edit">Edit</a>
+                    <a th:href="@{/nouns/manage/delete/{id}(id=${noun.id})}" class="btn btn-delete" 
+                       onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

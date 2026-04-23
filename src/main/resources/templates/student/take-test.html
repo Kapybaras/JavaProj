@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welsh Noun Test</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background-color: #f0f4f8; }
+        .test-container { max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .question-block { border-bottom: 1px solid #eee; padding: 20px 0; }
+        .question-text { font-weight: bold; font-size: 1.1em; color: #2c3e50; margin-bottom: 10px; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .radio-group { display: flex; gap: 20px; margin-top: 5px; }
+        .submit-btn { background-color: #3498db; color: white; padding: 15px; border: none; border-radius: 6px; width: 100%; cursor: pointer; font-size: 1.2em; margin-top: 20px; }
+        .submit-btn:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Welsh Noun Test</h1>
+        <p>Please answer all 20 questions. Once submitted, you cannot change your answers.</p>
+        <hr>
+        
+        <form th:action="@{/test/submit}" th:object="${test}" method="post">
+            <input type="hidden" th:field="*{username}" />
+            
+            <div th:each="question, stat : *{questions}" class="question-block">
+                <div class="question-text" th:text="${stat.count} + '. ' + ${question.questionText}"></div>
+                
+                <input type="hidden" th:field="*{questions[__${stat.index}__].questionText}" />
+                <input type="hidden" th:field="*{questions[__${stat.index}__].correctAnswer}" />
+
+                <div th:if="${question.questionText.contains('gender')}" class="radio-group">
+                    <label><input type="radio" th:field="*{questions[__${stat.index}__].studentAnswer}" value="masculine" required /> Masculine</label>
+                    <label><input type="radio" th:field="*{questions[__${stat.index}__].studentAnswer}" value="feminine" required /> Feminine</label>
+                </div>
+
+                <div th:unless="${question.questionText.contains('gender')}">
+                    <input type="text" th:field="*{questions[__${stat.index}__].studentAnswer}" placeholder="Your answer here..." required />
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Test</button>
+        </form>
+    </div>
+</body>
+</html>
