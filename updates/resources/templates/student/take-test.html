@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welsh Noun Test</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 40px; 
+            background-color: #f0f4f8; 
+            color: #333;
+        }
+        .test-container { 
+            max-width: 700px; 
+            margin: auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        }
+        h1 { color: #2c3e50; text-align: center; }
+        .instruction { text-align: center; color: #7f8c8d; margin-bottom: 30px; }
+        
+        .question-block { 
+            border-bottom: 1px solid #eee; 
+            padding: 25px 0; 
+        }
+        .question-block:last-of-type { border-bottom: none; }
+        
+        .question-text { 
+            font-weight: bold; 
+            font-size: 1.1em; 
+            color: #2c3e50; 
+            margin-bottom: 15px; 
+        }
+        
+        /* Styling for the text input questions */
+        input[type="text"] { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #dfe6e9; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus { 
+            border-color: #3498db; 
+            outline: none; 
+        }
+        
+        /* Styling for the radio buttons (Gender) */
+        .radio-group { 
+            display: flex; 
+            gap: 30px; 
+            margin-top: 10px; 
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .radio-option input { margin-right: 8px; }
+
+        .submit-btn { 
+            background-color: #3498db; 
+            color: white; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 8px; 
+            width: 100%; 
+            cursor: pointer; 
+            font-size: 1.2em; 
+            font-weight: bold;
+            margin-top: 30px; 
+            transition: background 0.3s;
+        }
+        .submit-btn:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+
+    <div class="test-container">
+        <h1>Welsh Noun Test</h1>
+        <p class="instruction">Please answer all 20 questions. Once submitted, your score will be recorded.</p>
+        <hr>
+        
+        <form th:action="@{/test/submit}" th:object="${test}" method="post">
+            
+            <input type="hidden" th:field="*{username}" />
+            
+            <div th:each="question, stat : *{details}" class="question-block">
+                
+                <div class="question-text">
+                    <span th:text="${stat.count} + '. ' + ${question.questionText}"></span>
+                </div>
+                
+                <input type="hidden" th:field="*{details[__${stat.index}__].questionText}" />
+                <input type="hidden" th:field="*{details[__${stat.index}__].correctAnswer}" />
+
+                <div th:if="${question.questionText.contains('gender')}" class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" th:field="*{details[__${stat.index}__].studentAnswer}" value="Masculine" required /> 
+                        Masculine
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" th:field="*{details[__${stat.index}__].studentAnswer}" value="Feminine" required /> 
+                        Feminine
+                    </label>
+                </div>
+
+                <div th:unless="${question.questionText.contains('gender')}">
+                    <input type="text" 
+                           th:field="*{details[__${stat.index}__].studentAnswer}" 
+                           placeholder="Type your answer here..." 
+                           required />
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Test</button>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Academi Gymraeg - Home</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; line-height: 1.6; background-color: #f4f7f6; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .role-section { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        .admin { border-left: 5px solid #e74c3c; }
+        .instructor { border-left: 5px solid #2ecc71; }
+        .student { border-left: 5px solid #3498db; }
+        h1 { color: #2c3e50; text-align: center; }
+        .welcome-msg { text-align: center; color: #7f8c8d; font-size: 1.1em; }
+        a { color: #2980b9; text-decoration: none; font-weight: bold; }
+        a:hover { text-decoration: underline; }
+        .logout-btn { background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Academi Gymraeg</h1>
+        <p class="welcome-msg">Welsh Noun Learning System [cite: 36]</p>
+        <hr>
+
+        <div class="role-section student" sec:authorize="hasRole('STUDENT') or isAnonymous()">
+            <h3>Learners (Students)</h3>
+            <p>Test your knowledge of Welsh nouns through random quizzes.</p>
+            <ul>
+                <li><a th:href="@{/test/take}">Take a New 20-Question Test</a></li>
+                <li><a th:href="@{/results/view}">View My Results</a></li>
+            </ul>
+        </div>
+
+        <div class="role-section instructor" sec:authorize="hasRole('INSTRUCTOR')">
+            <h3>Instructors</h3>
+            <p>Manage the noun database. Add new vocabulary or update existing entries.</p>
+            <ul>
+                <li><a th:href="@{/nouns/manage}">View/Search All Nouns</a></li>
+                <li><a th:href="@{/nouns/manage/add}">Create New Noun Entry</a></li>
+            </ul>
+        </div>
+
+        <div class="role-section admin" sec:authorize="hasRole('ADMINISTRATOR')">
+            <h3>System Administrators</h3>
+            <p>User account management and system permissions.</p>
+            <ul>
+                <li><a th:href="@{/admin/users}">Manage Users & Roles</a></li>
+                <li><a th:href="@{/admin/users/register}">Register New User</a></li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 20px; text-align: right;">
+            <div sec:authorize="isAuthenticated()">
+                Logged in as: <span th:text="${#authentication.name}">User</span> 
+                <form th:action="@{/logout}" method="post" style="display: inline; margin-left: 10px;">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+            <div sec:authorize="isAnonymous()">
+                <a th:href="@{/login}">Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

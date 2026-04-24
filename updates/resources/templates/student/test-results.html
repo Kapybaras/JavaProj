@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Test Results</title>
+</head>
+<body>
+    <h1>Test Complete!</h1>
+    <h2>Your Final Score: <span th:text="${currentTest.score}">0</span> / 20</h2>
+    
+    <hr>
+
+    <h3>Review your answers:</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Your Answer</th>
+                <th>Correct Answer</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="result : ${currentTest.details}">
+                <td th:text="${result.questionText}"></td>
+                <td th:text="${result.studentAnswer}"></td>
+                <td th:text="${result.correctAnswer}"></td>
+                <td>
+                    <span th:if="${result.correct}" style="color: green;">✔ Correct</span>
+                    <span th:if="${!result.correct}" style="color: red;">✘ Incorrect</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a th:href="@{/start-test}">Take another test</a>
+</body>
+</html>
